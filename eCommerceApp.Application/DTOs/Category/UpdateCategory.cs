@@ -1,4 +1,6 @@
-namespace eCommerceApp.Application.DTOs.Product;
+using eCommerceApp.Application.DTOs.Product;
+
+namespace eCommerceApp.Application.DTOs.Category;
 
 public class UpdateCategory : CategoryBase
 {
