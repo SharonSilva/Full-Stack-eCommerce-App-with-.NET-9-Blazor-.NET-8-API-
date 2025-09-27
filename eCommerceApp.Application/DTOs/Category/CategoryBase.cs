@@ -1,4 +1,4 @@
-namespace eCommerceApp.Application.DTOs.Product;
+namespace eCommerceApp.Application.DTOs.Category;
 
 public class CategoryBase
 {
