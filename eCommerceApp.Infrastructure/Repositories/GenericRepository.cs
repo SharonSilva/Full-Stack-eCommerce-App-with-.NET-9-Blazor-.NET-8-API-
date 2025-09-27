@@ -2,6 +2,7 @@ using eCommerceApp.Application.Exceptions;
 using eCommerceApp.Domain.Interfaces;
 using eCommerceApp.Infrastructure.Data;
 using eCommerceApp.Application.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace eCommerceApp.Infrastructure.Repositories;
 
@@ -14,15 +15,15 @@ public class GenericRepository<TEntity>(AppDbContext context) : IGeneric<TEntity
         return await context.SaveChangesAsync();
     }
 
-    public Task<TEntity> GetByIdAsync(Guid id)
+    public async Task<TEntity> GetByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var result = await context.Set<TEntity>().FindAsync(id);
+        return result!;
     }
 
     public async Task<int> DeleteAsync(Guid id)
     {
-        var entity = await context.Set<TEntity>().FindAsync(id);
-        if (entity == null)
+        var entity = await context.Set<TEntity>().FindAsync(id) ??
             throw new ItemNotFoundException($"Item with id {id} is not found");
         await context.SaveChangesAsync();
         
@@ -30,14 +31,15 @@ public class GenericRepository<TEntity>(AppDbContext context) : IGeneric<TEntity
         return await context.SaveChangesAsync();
     }
 
-    public Task<IEnumerable<TEntity>> GetAllAsync()
+    public async Task<IEnumerable<TEntity>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return await context.Set<TEntity>().AsNoTracking().ToListAsync();
     }
 
-    public Task<int> UpdateAsync(TEntity entity)
+    public async Task<int> UpdateAsync(TEntity entity)
     {
-        throw new NotImplementedException();
+        context.Set<TEntity>().Update(entity);
+        return await context.SaveChangesAsync();
     }
 }
 
